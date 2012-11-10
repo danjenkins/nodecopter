@@ -9,6 +9,6 @@ module.exports = {
   8  : "back",
   9  : "counterclockwise",
   0  : "flip",
-  '*': "up",
-  '#': 'down'
+  '*': "down",
+  '#': 'up'
 }
