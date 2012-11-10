@@ -27,12 +27,20 @@ Nodecopter.prototype.ami_send = function(data) {
 
 var nodecopter = new Nodecopter();
 
-nodecopter.on('pong', function(data){
+nodecopter.on('AsyncAGI', function(data){
+  var self = this;
   console.log(data);
+  if(data.subevent == 'Start'){
+    self.ami_send({
+      action:'AGI',
+      channel: data.channel,
+      command: 'GET DATA beep 3000 1'
+    })
+  }
 })
 
 nodecopter.ami_connect(function(){
-  
+  console.log('ami connected');
 });
 
 
