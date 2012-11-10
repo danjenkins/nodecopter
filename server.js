@@ -81,6 +81,8 @@ nodecopter.ami_connect(function(){
 });
 
 Nodecopter.prototype.commandControl = function(command) {
+  var upcount = 0;
+  var downcount = 0;
   switch(config[command]) {
     case 'land' :
       console.log('landing drone...');
@@ -92,20 +94,36 @@ Nodecopter.prototype.commandControl = function(command) {
     case 'takeoff':
       console.log('taking off...');
       client.takeoff();
+      break;
+    case 'stop':
+      console.log('Hovering hx-ardrone');
+      client.stop();
+      break;
+    case 'up':
+      upcount++;
+      console.log('Current upward speed = 0.'+upcount);
+      if(upcount < 10) {
+        client.after(500, function() {
+//          client.up(upcount/10);
+           client.up(0.1);
+        });
+      } else {
+        console.log('Warning: reached upward max speed...');
+      }
+      break;
+    case 'down':
+      downcount++;
+      console.log('Current downward speed = 0.'+downcount);
+      if(downcount < 10) {
+        client.after(500, function() {
+//        client.down(downcount/10);
+          client.down(0.1);
+        });
+      } else {
+        console.log('Warning: reached downward max speed...');
+      }
   }
 };
 
-//client
-//  .after(3000, function() {
-//    this.clockwise(0.5);
-//  })
-//  .after(3000, function() {
-//    this.animate('flipLeft', 15);
-//  })
-//  .after(1000, function() {
-//    this.stop();
-//    this.land();
-//  });
-//
 //client.createRepl();
 

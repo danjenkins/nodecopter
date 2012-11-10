@@ -1,9 +1,9 @@
 module.exports = {
   1  : "land",
   2  : "front",
-  3  : "emergency",
+  3  : "takeoff",
   4  : "left",
-  5  : "takeoff",
+  5  : 'stop',
   6  : "right",
   7  : "clockwise",
   8  : "back",
