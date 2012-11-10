@@ -7,6 +7,13 @@ var client = ar_drone.createClient();
 
 util.inherits(Nodecopter, events);
 
+var upcount = 0;
+var downcount = 0;
+var rightcount = 0;
+var leftcount = 0;
+var clockwisecount = 0
+var counterclockwisecount = 0;
+
 var nodecopter = new Nodecopter();
 
 function Nodecopter() {
@@ -87,15 +94,18 @@ nodecopter.ami_connect(function(){
 });
 
 Nodecopter.prototype.commandControl = function(command) {
-  var upcount = 0;
-  var downcount = 0;
+  if(config[command] != 'down'){
+    downcount = 0;
+  }
+  if(config[command] != 'up'){
+    upcount = 0;
+  }
+
   switch(config[command]) {
     case 'land' :
       console.log('landing drone...');
-      client.after(1000, function() {
-        client.stop();
-        client.land();
-      });
+      client.stop();
+      client.land();
       break;
     case 'takeoff':
       console.log('taking off...');
@@ -107,31 +117,74 @@ Nodecopter.prototype.commandControl = function(command) {
       break;
     case 'up':
       upcount++;
-      console.log('Current upward speed = 0.'+upcount);
       if(upcount < 10) {
-        client.after(500, function() {
-//          client.up(upcount/10);
-           client.up(0.1);
-        });
+        console.log('Current upward speed = 0.'+upcount);
+        client.up(upcount/10);
       } else {
+        client.up(1);
         console.log('Warning: reached upward max speed...');
       }
       break;
     case 'down':
       downcount++;
-      console.log('Current downward speed = 0.'+downcount);
       if(downcount < 10) {
-        client.after(500, function() {
-//        client.down(downcount/10);
-          client.down(0.1);
-        });
+        console.log('Current downward speed = 0.'+downcount);
+        client.down(downcount/10);
       } else {
         console.log('Warning: reached downward max speed...');
+        client.down(1);
       }
+      break;
+    case 'left':
+      console.log('banking left...');
+      leftcount++;
+      if(leftcount < 10) {
+        console.log('Current left speed = 0.'+leftcount);
+        client.left(leftcount/10);
+      } else {
+        console.log('Warning: reached left max speed...');
+        client.left(1);
+      }
+      break;
+    case 'right':
+      console.log('banking right...');
+      rightcount++;
+      if(rightcount < 10) {
+        console.log('Current left speed = 0.'+rightcount);
+        client.right(rightcount/10);
+      } else {
+        console.log('Warning: reached right max speed...');
+        client.right(1);
+      }
+      break;
+    case 'clockwise':
+      console.log('turning right...');
+      clockwisecount++;
+      if(clockwisecount < 10) {
+        console.log('Current right speed = 0.'+clockwisecount);
+        client.clockwise(clockwisecount/10);
+      } else {
+        console.log('Warning: reached right max speed...');
+        client.clockwise(1);
+      }
+      break;
+    case 'counterclockwise':
+      console.log('turning right...');
+      counterclockwisecount++;
+      if(counterclockwisecount < 10) {
+        console.log('Current left speed = 0.'+counterclockwisecount);
+        client.counterClockwise(counterclockwise/10);
+      } else {
+        console.log('Warning: reached left max speed...');
+        client.counterClockwise(1);
+      }
+      break;
+    case 'flip':
+      console.log('flipping!!!');
+      client.animate('flipAhead');
+      break;
   }
 };
-
-//client.createRepl();
 
 process.on('uncaughtException', function (err) {
   console.log('Caught exception: ' + err);
