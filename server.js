@@ -1,6 +1,7 @@
 var Ami = require('asterisk-ami');
 var events = require('events').EventEmitter;
 var util = require('util');
+var config = require('./config');
 
 function Nodecopter() {
   var self = this;
@@ -72,21 +73,22 @@ nodecopter.ami_connect(function(){
 });
 
 
-//var ar_drone = require('ar-drone');
+var ar_drone = require('ar-drone');
+var client = ar_drone.createClient();
 
-/*
-var client = arDrone.createClient();
+//client.takeoff();
+//
+//client
+//  .after(3000, function() {
+//    this.clockwise(0.5);
+//  })
+//  .after(3000, function() {
+//    this.animate('flipLeft', 15);
+//  })
+//  .after(1000, function() {
+//    this.stop();
+//    this.land();
+//  });
 
-client.takeoff();
+client.createRepl();
 
-client
-  .after(5000, function() {
-    this.clockwise(0.5);
-  })
-  .after(3000, function() {
-    this.animate('flipLeft', 15);
-  })
-  .after(1000, function() {
-    this.stop();
-    this.land();
-  });*/
