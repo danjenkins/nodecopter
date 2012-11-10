@@ -2,6 +2,12 @@ var Ami = require('asterisk-ami');
 var events = require('events').EventEmitter;
 var util = require('util');
 var config = require('./config');
+var ar_drone = require('ar-drone');
+var client = ar_drone.createClient();
+
+util.inherits(Nodecopter, events);
+
+var nodecopter = new Nodecopter();
 
 function Nodecopter() {
   var self = this;
@@ -13,8 +19,6 @@ function Nodecopter() {
   });
   
 }
-
-util.inherits(Nodecopter, events);
 
 Nodecopter.prototype.ami_connect = function(cb) {
   this.ami.connect(cb);
@@ -45,11 +49,6 @@ Nodecopter.prototype.decode_agi = function(data){
   return obj;
 }
 
-
-var nodecopter = new Nodecopter();
-
-
-
 nodecopter.on('AsyncAGI', function(data){
   var self = this;
   if(data.result){
@@ -72,12 +71,22 @@ nodecopter.ami_connect(function(){
   console.log('ami connected');
 });
 
+var commandControl = function(command) {
+  switch(config[command]) {
+    case 'land' :
+      console.log('landing drone...');
+      client.after(1000, function() {
+        client.stop();
+        client.land();
+      });
+    case 'takeoff':
+      console.log('taking off...');
+      client.takeoff();
+  }
+}
 
-var ar_drone = require('ar-drone');
-var client = ar_drone.createClient();
+commandControl(5);
 
-//client.takeoff();
-//
 //client
 //  .after(3000, function() {
 //    this.clockwise(0.5);
@@ -89,6 +98,6 @@ var client = ar_drone.createClient();
 //    this.stop();
 //    this.land();
 //  });
-
-client.createRepl();
+//
+//client.createRepl();
 
