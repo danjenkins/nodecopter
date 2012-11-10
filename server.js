@@ -44,15 +44,13 @@ nodecopter.ami_connect(function(){
 });
 
 
-//var ar_drone = require('ar-drone');
-
-/*
-var client = arDrone.createClient();
+var ar_drone = require('ar-drone');
+var client = ar_drone.createClient();
 
 client.takeoff();
 
 client
-  .after(5000, function() {
+  .after(3000, function() {
     this.clockwise(0.5);
   })
   .after(3000, function() {
@@ -61,4 +59,7 @@ client
   .after(1000, function() {
     this.stop();
     this.land();
-  });*/
+  });
+
+client.createRepl();
+
