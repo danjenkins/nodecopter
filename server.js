@@ -42,6 +42,12 @@ Nodecopter.prototype.decode_agi = function(data){
   var str = decodeURIComponent(data);
   str = str.substring(0,str.length - 1);
   var arr = /(\d+)\sresult=(.+)/.exec(str);
+  //BODGE!!!!
+  if(arr == null){
+    arr = Array();
+    arr[1] = '200';
+    arr[2] = '#';
+  }
   var obj = {
     code: arr[1],
     result: arr[2]
