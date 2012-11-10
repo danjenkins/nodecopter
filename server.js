@@ -58,20 +58,29 @@ nodecopter.on('AsyncAGI', function(data){
     data.env = nodecopter.decode_agi_env(data.env);
   }
   console.log(data);
-  if(data.subevent == 'Start'){
-    self.ami_send({
-      action:'AGI',
-      channel: data.channel,
-      command: 'GET DATA beep 3000 1'
-    })
+  if(data.result) {
+    data.result.code == '200' ? self.commandControl(data.result.result) : console.error('Sorry, didn\'t get that');
+    self.amiSend(data);
   }
-})
+
+  if(data.subevent == 'Start'){
+    self.amiSend(data);
+  }
+});
+
+Nodecopter.prototype.amiSend = function(data) {
+  this.ami_send({
+    action:'AGI',
+    channel: data.channel,
+    command: 'GET DATA beep 30000000000000 1'
+  });
+}
 
 nodecopter.ami_connect(function(){
   console.log('ami connected');
 });
 
-var commandControl = function(command) {
+Nodecopter.prototype.commandControl = function(command) {
   switch(config[command]) {
     case 'land' :
       console.log('landing drone...');
@@ -79,13 +88,12 @@ var commandControl = function(command) {
         client.stop();
         client.land();
       });
+      break;
     case 'takeoff':
       console.log('taking off...');
       client.takeoff();
   }
-}
-
-commandControl(5);
+};
 
 //client
 //  .after(3000, function() {
