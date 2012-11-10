@@ -2,10 +2,9 @@ var Ami = require('asterisk-ami');
 var events = require('events').EventEmitter;
 var util = require('util');
 
-
 function Nodecopter() {
   var self = this;
-  this.ami = new Ami({ host: '172.16.172.133', username: 'astricon', password: 'secret' });
+  this.ami = new Ami({ host: '192.168.15.101', username: 'nodecopter', password: 'secret' });
   this.ami.on('ami_data', function(data){
     if(data.event){
       self.emit(data.event, data);
@@ -24,11 +23,40 @@ Nodecopter.prototype.ami_send = function(data) {
   this.ami.send(data);
 };
 
+Nodecopter.prototype.decode_agi_env = function(data){
+  var str = decodeURIComponent(data);
+  str = str.substring(0,str.length - 2);
+  str = str.replace(/:\s/g, "\":\"");
+  str = str.replace(/\n/g,"\",\"");
+  str = str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  str = '{"' + str + '"}';
+  return JSON.parse(str);
+}
+
+Nodecopter.prototype.decode_agi = function(data){
+  var str = decodeURIComponent(data);
+  str = str.substring(0,str.length - 1);
+  var arr = /(\d+)\sresult=(.+)/.exec(str);
+  var obj = {
+    code: arr[1],
+    result: arr[2]
+  }
+  return obj;
+}
+
 
 var nodecopter = new Nodecopter();
 
+
+
 nodecopter.on('AsyncAGI', function(data){
   var self = this;
+  if(data.result){
+    data.result = nodecopter.decode_agi(data.result);
+  }
+  if(data.env){
+    data.env = nodecopter.decode_agi_env(data.env);
+  }
   console.log(data);
   if(data.subevent == 'Start'){
     self.ami_send({
