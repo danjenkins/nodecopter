@@ -13,8 +13,8 @@ var rightcount = 0;
 var leftcount = 0;
 var clockwisecount = 0
 var counterclockwisecount = 0;
-var frontspeed = 0;
-var backspeed = 0;
+var frontcount = 0;
+var backcount = 0;
 
 var nodecopter = new Nodecopter();
 
@@ -95,27 +95,26 @@ nodecopter.ami_connect(function(){
   console.log('ami connected');
 });
 
-Nodecopter.prototype.reset = function() {
-  upcount = 0;
-  downcount = 0;
-  rightcount = 0;
-  leftcount = 0;
-  clockwisecount = 0
-  counterclockwisecount = 0;
-  frontspeed = 0;
-  backspeed = 0;
+Nodecopter.prototype.reset = function(command) {
+  if(config[command] != 'left') {
+    leftcount = 0;
+  }if(config[command] != 'right') {
+    rightcount = 0;
+  }if(config[command] != 'up') {
+    upcount = 0;
+  }if(config[command] != 'down') {
+    downcount = 0;
+  }if(config[command] != 'counterclockwise') {
+    counterclockwisecount = 0;
+  }if(config[command] != 'front') {
+    frontcount = 0;
+  }if(config[command] != 'back') {
+    backscount = 0;
+  }
 }
 
 Nodecopter.prototype.commandControl = function(command) {
-  if(config[command] != 'left'
-      || config[command] != 'right'
-      || config[command] != 'up'
-      || config[command] != 'down'
-      || config[command] != 'counterclockwise'
-      || config[command] != 'front'
-      || config[command] != 'back'){
-     this.reset();
-  }
+  this.reset(command);
 
   switch(config[command]) {
     case 'land' :
