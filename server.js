@@ -133,3 +133,8 @@ Nodecopter.prototype.commandControl = function(command) {
 
 //client.createRepl();
 
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+  client.land();
+});
+
