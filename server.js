@@ -166,7 +166,7 @@ Nodecopter.prototype.commandControl = function(command) {
       console.log('banking right...');
       rightcount++;
       if(rightcount < 10) {
-        console.log('Current left speed = 0.'+rightcount);
+        console.log('Current right speed = 0.'+rightcount);
         client.right(rightcount/10);
       } else {
         console.log('Warning: reached right max speed...');
@@ -189,7 +189,7 @@ Nodecopter.prototype.commandControl = function(command) {
       counterclockwisecount++;
       if(counterclockwisecount < 10) {
         console.log('Current left speed = 0.'+counterclockwisecount);
-        client.counterClockwise(counterclockwise/10);
+        client.counterClockwise(counterclockwisecount/10);
       } else {
         console.log('Warning: reached left max speed...');
         client.counterClockwise(1);
