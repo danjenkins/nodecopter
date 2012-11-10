@@ -13,6 +13,8 @@ var rightcount = 0;
 var leftcount = 0;
 var clockwisecount = 0
 var counterclockwisecount = 0;
+var frontspeed = 0;
+var backspeed = 0;
 
 var nodecopter = new Nodecopter();
 
@@ -93,12 +95,26 @@ nodecopter.ami_connect(function(){
   console.log('ami connected');
 });
 
+Nodecopter.prototype.reset = function() {
+  upcount = 0;
+  downcount = 0;
+  rightcount = 0;
+  leftcount = 0;
+  clockwisecount = 0
+  counterclockwisecount = 0;
+  frontspeed = 0;
+  backspeed = 0;
+}
+
 Nodecopter.prototype.commandControl = function(command) {
-  if(config[command] != 'down'){
-    downcount = 0;
-  }
-  if(config[command] != 'up'){
-    upcount = 0;
+  if(config[command] != 'left'
+      || config[command] != 'right'
+      || config[command] != 'up'
+      || config[command] != 'down'
+      || config[command] != 'counterclockwise'
+      || config[command] != 'front'
+      || config[command] != 'back'){
+     this.reset();
   }
 
   switch(config[command]) {
@@ -183,6 +199,25 @@ Nodecopter.prototype.commandControl = function(command) {
       console.log('flipping!!!');
       client.animate('flipAhead');
       break;
+    case 'front':
+      frontspeed++;
+      console.log('moving forward...');
+      if(frontspeed < 10) {
+        client.front(frontspeed/10);
+      } else {
+        console.log('Warning: reached forward max speed...');
+        client.front(1);
+      }
+      break;
+    case 'back':
+      backspeed++;
+      console.log('moving backward...');
+      if(backspeed < 10) {
+        client.back(backspeed/10);
+      } else {
+        console.log('Warning: reached backward max speed...');
+        client.back(1);
+      }
   }
 };
 
