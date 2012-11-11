@@ -64,7 +64,7 @@ Nodecopter.prototype.decode_agi = function(data){
   return obj;
 }
 
-nodecopter.on('AsyncAGI', function(data){
+nodecopter.on('AsyncAGI', function(data){ // this.on(.... ???
   var self = this;
   if(data.result){
     data.result = nodecopter.decode_agi(data.result);
@@ -199,20 +199,20 @@ Nodecopter.prototype.commandControl = function(command) {
       client.animate('flipAhead');
       break;
     case 'front':
-      frontspeed++;
+      frontcount++;
       console.log('moving forward...');
-      if(frontspeed < 10) {
-        client.front(frontspeed/10);
+      if(frontcount < 10) {
+        client.front(frontcount/10);
       } else {
         console.log('Warning: reached forward max speed...');
         client.front(1);
       }
       break;
     case 'back':
-      backspeed++;
+      backcount++;
       console.log('moving backward...');
-      if(backspeed < 10) {
-        client.back(backspeed/10);
+      if(backcount < 10) {
+        client.back(backcount/10);
       } else {
         console.log('Warning: reached backward max speed...');
         client.back(1);
